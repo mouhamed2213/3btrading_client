@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Manrope:wght@500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #13251f;
+  --color-brand: #163c31;
+  --color-brand-dark: #102d25;
+  --color-brand-deep: #0d211b;
+  --color-lime: #d7ef63;
+  --color-lime-soft: #e4f78b;
+  --color-cream: #f5f4ee;
+  --color-muted: #6f7974;
+  --color-line: #dfe3df;
+  --color-surface: #f4f6f3;
+  --color-olive: #78920c;
+  --color-danger: #d85d52;
+  --color-warn: #f2a43b;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-[#fbfcfa] font-sans text-ink antialiased; }
+  button { @apply cursor-pointer; }
+  button:disabled { @apply cursor-not-allowed opacity-60; }
+  img { @apply block max-w-full; }
+}
+
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+@keyframes hero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+@theme inline {
+  --animate-fade-up: fade-up .25s ease-out;
+  --animate-hero-zoom: hero-zoom 12s ease-out both;
+}
+
+/* Impression des factures / reçus */
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: absolute; inset: 0; background: #fff; }
+  .no-print { display: none !important; }
+}
