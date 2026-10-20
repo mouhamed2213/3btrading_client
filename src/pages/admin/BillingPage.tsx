@@ -58,7 +58,6 @@ export default function BillingPage() {
     if (invoiceId) setSelected(invoiceId);
   }, [invoiceId]);
 
-  console.log(invoiceId)
 
   return (
     <>

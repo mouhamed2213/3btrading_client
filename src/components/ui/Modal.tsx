@@ -1,6 +1,8 @@
 import { cn } from "@/lib/cn";
+import { equipmentStatus } from "@/lib/labels";
 import { X } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
+import { StatusBadge } from "./Badge";
 
 type Props = {
   title: string;
@@ -10,6 +12,7 @@ type Props = {
   footer?: ReactNode;
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
+  status?: string;
 };
 const widths = {
   sm: "max-w-md",
@@ -26,6 +29,7 @@ export function Modal({
   footer,
   size = "md",
   className,
+  status,
 }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -54,7 +58,9 @@ export function Modal({
       >
         <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-5">
           <div>
-            <h2 className="font-display text-xl font-bold">{title}</h2>
+            <h2 className="font-display text-xl font-bold">{title} </h2>
+            <StatusBadge map={equipmentStatus} value={status as string} />
+
             {subtitle && <p className="mt-1 text-xs text-muted">{subtitle}</p>}
           </div>
           <button
