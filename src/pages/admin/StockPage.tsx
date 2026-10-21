@@ -19,6 +19,7 @@ import { fcfa } from "@/lib/format";
 import { useAction, useApi, useDebounced } from "@/lib/hooks";
 import { label, options, partFamily } from "@/lib/labels";
 import type { Paged, Part } from "@/lib/types";
+import { Combobox } from "@/components/ui/Combobox";
 
 function PartForm({ item, onClose }: { item?: Part; onClose: () => void }) {
   const { v, bind, check } = useForm({
@@ -37,7 +38,7 @@ function PartForm({ item, onClose }: { item?: Part; onClose: () => void }) {
       footer={<><Button variant="outline" onClick={onClose}>Fermer</Button><Button loading={save.isPending} disabled={!v.name || !v.brand || v.price === ""} onClick={() => save.mutate()}>Enregistrer</Button></>}>
       <div className="grid gap-4 sm:grid-cols-3">
         <Field label="Désignation" className="sm:col-span-2"><Input {...bind("name")} /></Field><Field label="Marque"><Input {...bind("brand")} /></Field>
-        <Field label="Famille"><Select {...bind("family")}><Options items={options(partFamily)} /></Select></Field>
+        <Field label="Famille"><Combobox {...bind("family")} options={options(partFamily)} clearable={false} placeholder="Famille" searchPlaceholder="Rechercher une famille…" /></Field>
         <Field label="Référence OEM"><Input {...bind("oemReference")} /></Field>
         <Field label="Garantie (mois)"><Input type="number" min={0} {...bind("warrantyMonths")} /></Field>
         <Field label="Modèles compatibles" hint="Séparés par des virgules : CAT 320D, PC200" className="sm:col-span-3"><Input {...bind("compatibleModels")} /></Field>

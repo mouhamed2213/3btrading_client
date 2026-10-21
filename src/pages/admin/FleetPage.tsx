@@ -30,6 +30,7 @@ import {
 import type { Equipment, Paged } from "@/lib/types";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Combobox } from "@/components/ui/Combobox";
 
 const s = (n?: number | null) => (n == null ? "" : String(n));
 
@@ -122,9 +123,13 @@ function EquipmentForm({
           <Input {...bind("name")} placeholder="Pelle hydraulique CAT 320D" />
         </Field>
         <Field label="Catégorie">
-          <Select {...bind("category")}>
-            <Options items={options(equipmentCategory)} />
-          </Select>
+          <Combobox
+            {...bind("category")}
+            options={options(equipmentCategory)}
+            clearable={false}
+            placeholder="Catégorie"
+            searchPlaceholder="Rechercher une catégorie…"
+          />
         </Field>
         <Field label="Marque">
           <Input {...bind("brand")} />

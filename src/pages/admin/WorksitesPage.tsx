@@ -19,6 +19,7 @@ import { dateFr, fcfa, num, today } from "@/lib/format";
 import { useAction, useApi, useDebounced } from "@/lib/hooks";
 import { label, options, workType, worksitePricing, worksiteStatus } from "@/lib/labels";
 import type { Paged, Worksite } from "@/lib/types";
+import { Combobox } from "@/components/ui/Combobox";
 
 const UNIT: Record<string, string> = { FORFAIT: "Prix global (FCFA)", VOLUME: "Prix par m³ (FCFA)", HORAIRE: "Prix par heure (FCFA)", JOURNEE: "Prix par jour (FCFA)" };
 const QTY: Record<string, string> = { VOLUME: "m³ réalisés", HORAIRE: "heures", JOURNEE: "jours", FORFAIT: "avancement" };
@@ -34,7 +35,7 @@ function WorksiteForm({ onClose }: { onClose: () => void }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nom du chantier" className="sm:col-span-2"><Input {...bind("name")} placeholder="Terrassement lotissement Diamniadio" /></Field>
         <Field label="Client"><CustomerSelect {...bind("customerId")} /></Field><Field label="Lieu"><Input {...bind("location")} /></Field>
-        <Field label="Type de travaux"><Select {...bind("workType")}><Options items={options(workType)} /></Select></Field>
+        <Field label="Type de travaux"><Combobox {...bind("workType")} options={options(workType)} clearable={false} placeholder="Type de travaux" searchPlaceholder="Rechercher un type de travaux…" /></Field>
         <Field label="Tarification"><Select {...bind("pricing")}><Options items={options(worksitePricing)} /></Select></Field>
         <Field label={UNIT[v.pricing as string] ?? ""}><Input type="number" min={0} {...bind("unitPrice")} /></Field>
         {v.pricing !== "FORFAIT" && <Field label={`Quantité estimée (${QTY[v.pricing as string]})`}><Input type="number" min={0} {...bind("estimatedQuantity")} /></Field>}

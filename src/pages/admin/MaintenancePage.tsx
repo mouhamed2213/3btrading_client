@@ -17,6 +17,7 @@ import { dateFr, fcfa, today } from "@/lib/format";
 import { useAction, useApi } from "@/lib/hooks";
 import { label, maintenanceKind, maintenanceStatus, maintenanceType, options } from "@/lib/labels";
 import type { Maintenance, Paged } from "@/lib/types";
+import { Combobox } from "@/components/ui/Combobox";
 
 function OrderForm({ onClose }: { onClose: () => void }) {
   const { v, bind } = useForm({ kind: "INTERNE", type: "ENTRETIEN_PERIODIQUE", equipmentId: "", customerId: "", externalMachine: "", scheduledDate: today(), technician: "", estimatedCost: "", description: "" });
@@ -30,7 +31,7 @@ function OrderForm({ onClose }: { onClose: () => void }) {
     <Modal title="Nouvelle intervention" onClose={onClose} footer={<><Button variant="outline" onClick={onClose}>Annuler</Button><Button disabled={!ready} loading={save.isPending} onClick={() => save.mutate()}>Planifier</Button></>}>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Nature"><Select {...bind("kind")}><Options items={options(maintenanceKind)} /></Select></Field>
-        <Field label="Type d'intervention"><Select {...bind("type")}><Options items={options(maintenanceType)} /></Select></Field>
+        <Field label="Type d'intervention"><Combobox {...bind("type")} options={options(maintenanceType)} clearable={false} placeholder="Type d'intervention" searchPlaceholder="Rechercher un type…" /></Field>
         {kind !== "REPARATION_CLIENT" && <Field label={kind === "SAV" ? "Engin vendu" : "Engin de la flotte"}><EquipmentSelect {...bind("equipmentId")} /></Field>}
         {kind !== "INTERNE" && <Field label="Client"><CustomerSelect {...bind("customerId")} /></Field>}
         {kind === "REPARATION_CLIENT" && <Field label="Machine du client"><Input {...bind("externalMachine")} placeholder="Ex. Pelle Hitachi ZX200" /></Field>}

@@ -1,15 +1,14 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { CustomerSelect } from "@/components/shared/Selects";
+import { CustomerSelect, EquipmentSelect, PartSelect } from "@/components/shared/Selects";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Options, Select, Textarea } from "@/components/ui/Field";
 import { Modal } from "@/components/ui/Modal";
 import { api } from "@/lib/api";
 import { useForm, strOrNull } from "@/lib/forms";
 import { fcfa } from "@/lib/format";
-import { useAction, useApi } from "@/lib/hooks";
+import { useAction } from "@/lib/hooks";
 import { invoiceType, options } from "@/lib/labels";
-import type { Equipment, Paged, Part } from "@/lib/types";
 
 type Line = { label: string; quantity: string; unitPrice: string; partId?: string; equipmentId?: string };
 const TAX = 18;
@@ -19,8 +18,6 @@ export function InvoiceForm({ onClose }: { onClose: () => void }) {
   const due = new Date(Date.now() + 15 * 864e5).toISOString().slice(0, 10);
   const { v, bind } = useForm({ type: "PROFORMA", customerId: "", dueDate: due, notes: "" });
   const [lines, setLines] = useState<Line[]>([{ label: "", quantity: "1", unitPrice: "" }]);
-  const parts = useApi<Paged<Part>>("/parts", { limit: 100 });
-  const eqs = useApi<Paged<Equipment>>("/equipment", { limit: 100, isForSale: true });
 
   const set = (idx: number, patch: Partial<Line>) => setLines((l) => l.map((x, i) => (i === idx ? { ...x, ...patch } : x)));
   const valid = lines.filter((l) => l.label && Number(l.quantity) > 0 && l.unitPrice !== "");
@@ -54,12 +51,12 @@ export function InvoiceForm({ onClose }: { onClose: () => void }) {
         ))}
         <div className="flex flex-wrap gap-2 border-t border-line p-3">
           <Button size="sm" variant="outline" icon={<Plus size={14} />} onClick={() => setLines((l) => [...l, { label: "", quantity: "1", unitPrice: "" }])}>Ligne libre</Button>
-          <Select className="h-8 w-auto text-xs" value="" onChange={(e) => { const p = parts.data?.data.find((x) => x.id === e.target.value); if (p) setLines((l) => [...l.filter((x) => x.label || x.unitPrice), { label: `${p.name}${p.oemReference ? ` (${p.oemReference})` : ""}`, quantity: "1", unitPrice: String(p.price), partId: p.id }]); }}>
-            <option value="">+ Pièce du stock</option>{parts.data?.data.filter((p) => p.stockQuantity > 0).map((p) => <option key={p.id} value={p.id}>{p.name} ({p.stockQuantity})</option>)}
-          </Select>
-          <Select className="h-8 w-auto text-xs" value="" onChange={(e) => { const q = eqs.data?.data.find((x) => x.id === e.target.value); if (q) setLines((l) => [...l.filter((x) => x.label || x.unitPrice), { label: `${q.name} (${q.code})`, quantity: "1", unitPrice: String(q.salePrice ?? ""), equipmentId: q.id }]); }}>
-            <option value="">+ Engin à vendre</option>{eqs.data?.data.filter((q) => q.status === "DISPONIBLE").map((q) => <option key={q.id} value={q.id}>{q.code} · {q.name}</option>)}
-          </Select>
+          <div className="w-60">
+            <PartSelect value="" placeholder="+ Pièce du stock" onSelect={(p) => setLines((l) => [...l.filter((x) => x.label || x.unitPrice), { label: `${p.name}${p.oemReference ? ` (${p.oemReference})` : ""}`, quantity: "1", unitPrice: String(p.price), partId: p.id }])} />
+          </div>
+          <div className="w-60">
+            <EquipmentSelect value="" forSaleOnly availableOnly placeholder="+ Engin à vendre" onSelect={(q) => setLines((l) => [...l.filter((x) => x.label || x.unitPrice), { label: `${q.name} (${q.code})`, quantity: "1", unitPrice: String(q.salePrice ?? ""), equipmentId: q.id }])} />
+          </div>
         </div>
       </div>
 
