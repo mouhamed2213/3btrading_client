@@ -320,3 +320,17 @@ export type Dashboard = {
     plannedMaintenance: number;
   };
 };
+
+export type TimelineEvent = {
+  type: "RESERVATION" | "INVOICE" | "PAYMENT" | "WORKSITE" | "MAINTENANCE" | "INQUIRY";
+  id: string; date: string; reference: string; title: string; subtitle?: string; amount?: number; status?: string;
+};
+export type CustomerOverview = {
+  customer: Customer;
+  stats: {
+    billedTotal: number; paidTotal: number; outstanding: number; openInvoices: number; overdueInvoices: number; overdueAmount: number;
+    reservations: { total: number; active: number }; worksites: { total: number; active: number };
+    maintenance: number; inquiries: number; customerSince: string | null;
+  };
+  timeline: TimelineEvent[];
+};

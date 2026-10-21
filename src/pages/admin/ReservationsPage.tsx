@@ -154,7 +154,9 @@ export default function ReservationsPage() {
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get("open"),
+  );
   const q = useDebounced(search);
   const list = useApi<List>("/reservations", {
     status: status || undefined,

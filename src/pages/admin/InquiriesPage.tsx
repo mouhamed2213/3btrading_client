@@ -113,7 +113,9 @@ function Detail({ item, onClose }: { item: Inquiry; onClose: () => void }) {
 export default function InquiriesPage() {
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get("open"),
+  );
   const list = useApi<Paged<Inquiry> & { newCount: number }>("/inquiries", {
     status: status || undefined,
     page,

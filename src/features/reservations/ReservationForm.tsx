@@ -36,9 +36,9 @@ function preview(
   return { qty: `${days} jour(s)`, unit, total: days * unit, degressive };
 }
 
-export function ReservationForm({ onClose }: { onClose: () => void }) {
+export function ReservationForm({ onClose, customerId = "" }: { onClose: () => void; customerId?: string }) {
   const { v, bind } = useForm({
-    customerId: "",
+    customerId,
     equipmentId: "",
     startDate: today(),
     endDate: today(),

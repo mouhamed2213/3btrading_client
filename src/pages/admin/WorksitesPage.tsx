@@ -317,7 +317,9 @@ export default function WorksitesPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get("open"),
+  );
   const q = useDebounced(search);
   const list = useApi<Paged<Worksite> & { activeCount: number }>("/worksites", {
     status: status || undefined,

@@ -14,9 +14,9 @@ type Line = { label: string; quantity: string; unitPrice: string; partId?: strin
 const TAX = 18;
 
 /** Facture libre (vente de pièces / d'engins, prestations diverses). Réservations et chantiers se facturent depuis leur propre fenêtre. */
-export function InvoiceForm({ onClose }: { onClose: () => void }) {
+export function InvoiceForm({ onClose, customerId = "" }: { onClose: () => void; customerId?: string }) {
   const due = new Date(Date.now() + 15 * 864e5).toISOString().slice(0, 10);
-  const { v, bind } = useForm({ type: "PROFORMA", customerId: "", dueDate: due, notes: "" });
+  const { v, bind } = useForm({ type: "PROFORMA", customerId, dueDate: due, notes: "" });
   const [lines, setLines] = useState<Line[]>([{ label: "", quantity: "1", unitPrice: "" }]);
 
   const set = (idx: number, patch: Partial<Line>) => setLines((l) => l.map((x, i) => (i === idx ? { ...x, ...patch } : x)));
