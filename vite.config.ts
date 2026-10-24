@@ -6,5 +6,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: { alias: { "@": path.resolve(import.meta.dirname, "src") } },
-  server: { port: 5173 },
+  server: {
+    port: 5173,
+    // allowedHosts: ["abdominal-corridor-sanctity.ngrok-free.dev"],
+  },
 });
