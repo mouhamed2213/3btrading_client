@@ -1,12 +1,13 @@
+import type { Ref } from "react";
 import { COMPANY } from "@/components/layout/PublicLayout";
 import { dateFr, fcfa } from "@/lib/format";
 import { invoiceType, label, paymentMethod } from "@/lib/labels";
 import type { Invoice } from "@/lib/types";
 
-/** Document imprimable (proforma, acompte, facture). L'impression ne garde que `.print-area`. */
-export function InvoiceDocument({ invoice: i }: { invoice: Invoice }) {
+/** Document imprimable (proforma, acompte, facture). Imprimé via `printElement(ref.current)` (lib/print.ts). */
+export function InvoiceDocument({ invoice: i, ref }: { invoice: Invoice; ref?: Ref<HTMLDivElement> }) {
   return (
-    <div className="print-area mx-auto w-full max-w-[720px] bg-white p-8 text-ink shadow-[0_10px_35px_#13251f18] sm:p-12">
+    <div ref={ref} className="mx-auto w-full max-w-[720px] bg-white p-8 text-ink shadow-[0_10px_35px_#13251f18] sm:p-12 print:max-w-none print:p-0 print:shadow-none">
       <div className="flex items-start justify-between border-b-[3px] border-brand pb-6">
         <div><b className="font-display text-xl text-brand">3B TRADING</b><p className="mt-1 text-[11px] leading-5 text-muted">{COMPANY.address}<br />{COMPANY.phone} · {COMPANY.email}</p></div>
         <div className="grid text-right"><b className="font-display text-xl uppercase text-brand">{label(invoiceType, i.type)}</b><strong className="mt-1 text-xs">{i.number}</strong></div>

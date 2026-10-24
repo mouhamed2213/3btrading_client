@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { StatusBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Options, Select } from "@/components/ui/Field";
 import { Modal } from "@/components/ui/Modal";
 import { api } from "@/lib/api";
+import { printElement } from "@/lib/print";
 import { dateFr, dateTimeFr, fcfa } from "@/lib/format";
 import { useForm } from "@/lib/forms";
 import { useAction, useApi } from "@/lib/hooks";
@@ -35,6 +37,7 @@ export function InvoiceDetail({
 }) {
   const { data: i } = useApi<Invoice>(`/invoices/${id}`);
   const [receipt, setReceipt] = useState<string | null>(null);
+  const docRef = useRef<HTMLDivElement>(null);
   const pay = useForm({ amount: "", method: "ESPECES", transactionRef: "" });
   const rem = useForm({ channel: "WHATSAPP", note: "" });
   const conv = useForm({ type: "DEFINITIVE", amount: "" });
@@ -93,7 +96,7 @@ export function InvoiceDetail({
         className="bg-[#e9ede9]"
       >
         <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
-          <InvoiceDocument invoice={i} />
+          <InvoiceDocument invoice={i} ref={docRef} />
           <aside className="no-print grid content-start gap-4 bg-white p-4 text-sm">
             <div className="flex flex-wrap items-center gap-2">
               <StatusBadge map={invoiceStatus} value={i.status} />
@@ -106,7 +109,7 @@ export function InvoiceDetail({
             <Button
               variant="outline"
               icon={<Printer size={16} />}
-              onClick={() => window.print()}
+              onClick={() => docRef.current && printElement(docRef.current, i.number)}
             >
               Imprimer / PDF
             </Button>

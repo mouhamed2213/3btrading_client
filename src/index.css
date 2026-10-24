@@ -35,10 +35,7 @@
   --animate-hero-zoom: hero-zoom 12s ease-out both;
 }
 
-/* Impression des factures / reçus */
+/* Impression : factures et reçus passent par lib/print.ts (cadre isolé), pas par window.print() sur la page. */
 @media print {
-  body * { visibility: hidden; }
-  .print-area, .print-area * { visibility: visible; }
-  .print-area { position: absolute; inset: 0; background: #fff; }
   .no-print { display: none !important; }
 }
