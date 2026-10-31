@@ -1,5 +1,4 @@
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:4000/api";
-// const BASE = import.meta.env.VITE_API_URL ?? "https://abdominal-corridor-sanctity.ngrok-free.dev:4000/api";
 
 const TOKEN_KEY = "3bt_token";
 
